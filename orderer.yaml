@@ -1,0 +1,161 @@
+---
+General:
+    ListenAddress: 0.0.0.0
+
+    ListenPort: 7050
+ 
+    TLS:
+        Enabled: true
+        Certificate: crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/server.crt
+        Privatekey: crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/server.key
+        RootCAs:
+          - crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/ca.crt
+        ClientAuthRequired: false
+        ClientRootCAs:
+    # Keepalive settings for the GRPC server.
+    Keepalive:
+        ServerMinInterval: 60s
+        ServerInterval: 7200s
+        ServerTimeout: 60s
+
+    Cluster:
+        SendBufferSize: 10
+        ClientCertificate: crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/server.crt
+        ClientPrivateKey: crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/server.key
+
+        ListenPort:
+        ListenAddress:
+        ServerCertificate:
+        ServerPrivateKey:
+
+    # Bootstrap method: The method by which to obtain the bootstrap block
+    # system channel is specified. The option can be one of:
+    #   "file" - path to a file containing the genesis block or config block of system channel
+    #   "none" - allows an orderer to start without a system channel configuration
+    BootstrapMethod: file
+
+    # Bootstrap file: The file containing the bootstrap block to use when
+    # initializing the orderer system channel and BootstrapMethod is set to
+    # "file".  The bootstrap file can be the genesis block, and it can also be
+    # a config block for late bootstrap of some consensus methods like Raft.
+    # Generate a genesis block by updating $FABRIC_CFG_PATH/configtx.yaml and
+    # using configtxgen command with "-outputBlock" option.
+    # Defaults to file "genesisblock" (in $FABRIC_CFG_PATH directory) if not specified.
+    BootstrapFile: material/orgs.genesis.block
+
+    GenesisFile:
+
+    # LocalMSPDir is where to find the private crypto material needed by the
+    # orderer. It is set relative here as a default for dev environments but
+    # should be changed to the real location in production.
+    LocalMSPDir: OrdererMSP
+
+    LocalMSPDir: crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/msp
+
+    LocalMSPID: OrdererMSP
+
+    Profile:
+        Enabled: false
+        Address: 0.0.0.0:6060
+
+    BCCSP:
+        Default: SW
+
+        SW:
+            Hash: SHA2
+            Security: 256
+            FileKeyStore:
+                KeyStore:
+
+        # Settings for the PKCS#11 crypto provider (i.e. when DEFAULT: PKCS11)
+        PKCS11:
+            # Location of the PKCS11 module library
+            Library:
+            # Token Label
+            Label:
+            # User PIN
+            Pin:
+            Hash:
+            Security:
+            FileKeyStore:
+                KeyStore:
+
+    Authentication:
+        TimeWindow: 15m
+
+
+FileLedger:
+    Location: production/orderer/orderer0
+    Prefix: hyperledger-fabric-ordererledger
+
+
+Kafka:
+
+    Retry:
+        ShortInterval: 5s
+        ShortTotal: 10m
+        LongInterval: 5m
+        LongTotal: 12h
+        NetworkTimeouts:
+            DialTimeout: 10s
+            ReadTimeout: 10s
+            WriteTimeout: 10s
+        Metadata:
+            RetryBackoff: 250ms
+            RetryMax: 3
+        Producer:
+            RetryBackoff: 100ms
+            RetryMax: 3
+        Consumer:
+            RetryBackoff: 2s
+    Topic:
+        ReplicationFactor: 3
+    Verbose: false
+
+    TLS:
+
+      Enabled: false
+
+      PrivateKey:
+
+      Certificate:
+
+      RootCAs:
+
+    SASLPlain:
+      Enabled: false
+      User:
+      Password:
+
+    Version:
+
+Debug:
+
+    BroadcastTraceDir:
+
+    DeliverTraceDir:
+
+
+Operations:
+    ListenAddress: orderer0.example.com:8443
+    TLS:
+        Enabled: false
+        ClientAuthRequired: false
+        ClientRootCAs: [crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/ca.crt]
+
+Metrics:
+    #Provider: prometheus
+    Provider: disabled
+
+    Statsd:
+      Network: udp
+
+      Address: 127.0.0.1:8125
+
+      WriteInterval: 30s
+
+      Prefix:
+
+Consensus:
+    WALDir: production/orderer/orderer0/etcdraft/wal
+    SnapDir: production/orderer/orderer0/etcdraft/snapshot
